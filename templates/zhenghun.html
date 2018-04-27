@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="./css/default.css">
+</head>
+<body>
+<div class="server_title">
+  <img src="./img/title.png" alt="">
+{% include "./user_nav.html" %}
+</div>
+<div class="server_content">
+  <div class="false_list"></div>
+{% include "./nav.html" %}
+  <div class="server_tablepage">
+    <div class="server_searchbox">
+      <p class="searchbox_title"><img src="./img/search.png" alt="">筛选</p>
+      <div class="searchbox_center">
+        <p class="search_condition">
+          <span>ID：</span>
+          <input type="text">
+        </p>
+      </div>
+      <p class="search_btnbox">
+        <span class="search_btn cursor">搜索</span>
+      </p>
+    </div>
+    <div class="server_tablebox">
+      222
+    </div>
+  </div>
+</div>
+ <!--开通征婚-->
+<div class="openup_zhenghun popup">
+  <div class="popupshaw"></div>
+  <div class="popup_content zhenghun_content">
+    <p class="popup_close">
+      <img onclick="closePopup(this, '.openup_zhenghun')" class="cursor" src="./img/close.png" alt="">
+    </p>
+    <div class="zhenghun_title">
+      您要开通“<span>音乐达人约起来</span>”征婚帖吗？
+    </div>
+    <div class="zhenghun_form">
+      <div class="zhenghun_form_row">
+        <span>原因：</span>
+        <select>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </div>
+      <div class="zhenghun_form_row">
+        <span>补充：</span>
+        <textarea name=""></textarea>
+      </div>
+      <div class="zhenghun_form_row zhenghun_btn">
+        <span class="cursor">确定</span>
+        <span onclick="closePopup(this, '.openup_zhenghun')" class="active cursor close_popup_btn">取消</span>
+      </div>
+    </div>
+  </div>
+</div>
+<!--关闭征婚-->
+<div class="close_zhenghun popup">
+  <div class="popupshaw"></div>
+  <div class="popup_content zhenghun_content">
+    <p class="popup_close">
+      <img onclick="closePopup(this, '.close_zhenghun')" class="cursor" src="./img/close.png" alt="">
+    </p>
+    <div class="zhenghun_title">
+      <img class="notice_img" src="./img/notice.png" alt="">您要禁止“<span>音乐达人约起来</span>”征婚帖吗？
+    </div>
+    <div class="zhenghun_form">
+      <div class="zhenghun_form_row">
+        <span>原因：</span>
+        <select>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </div>
+      <div class="zhenghun_form_row">
+        <span>补充：</span>
+        <textarea name="" ></textarea>
+      </div>
+      <div class="zhenghun_form_row zhenghun_btn">
+        <span class="cursor">确定</span>
+        <span onclick="closePopup(this, '.close_zhenghun')" class="active cursor close_popup_btn">取消</span>
+      </div>
+    </div>
+  </div>
+</div>
+<!--删除用户-->
+<div class="del_user popup">
+  <div class="popupshaw"></div>
+  <div class="popup_content deluser_content">
+    <p class="popup_close">
+      <img onclick="closePopup(this, '.del_user')" class="cursor" src="./img/close.png" alt="">
+    </p>
+    <div class="deluser_title">
+      <p class="deluser_flex"><img class="notice_img" src="./img/notice.png" alt="">确认删除信息？</p>
+      <p class="deluser_noticeword">信息删除后将无法恢复。</p>
+    </div>
+    <div class="zhenghun_form_row zhenghun_btn">
+      <span class="cursor">确定</span>
+      <span onclick="closePopup(this, '.del_user')" class="active cursor close_popup_btn">取消</span>
+    </div>
+  </div>
+</div>
+<!--充值-->
+<div class="popup server_recharge">
+  <div class="popupshaw"></div>
+  <div class="popup_content recharge_content">
+    <div class="recharge_title">
+      <span>
+        充值
+      </span>
+      <p class="popup_close">
+        <img onclick="closePopup(this, '.server_recharge')" class="cursor" src="./img/w_close.png" alt="">
+      </p>
+    </div>
+    <div class="recharge_form">
+      充值金额：<input class="recharge_input" type="number"> 元
+    </div>
+    <div class="zhenghun_form_row zhenghun_btn">
+      <span class="cursor">确定</span>
+      <span onclick="closePopup(this, '.server_recharge')" class="active cursor close_popup_btn">取消</span>
+    </div>
+  </div>
+</div>
+</body>
+<script src="./js/jquery-1.12.1.js"></script>
+<script src="./js/default.js"></script>
+</html>

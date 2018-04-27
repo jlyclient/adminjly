@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="./css/default.css">
+</head>
+<body>
+<div class="server_title">
+  <img src="./img/title.png" alt="">
+{% include "./user_nav.html" %}
+</div>
+<div class="server_content">
+  <div class="false_list"></div>
+{% include "./nav.html" %}
+  <div class="server_tablepage">
+    <div class="server_searchbox">
+      <p class="searchbox_title"><img src="./img/search.png" alt="">筛选</p>
+      <div class="searchbox_center">
+        <p class="search_condition">
+          <span>ID：</span>
+          <input type="text">
+        </p>
+        <p class="search_condition">
+          <span>昵称：</span>
+          <input type="text">
+        </p>
+      </div>
+      <p class="search_btnbox">
+        <span class="search_btn cursor">搜索</span>
+      </p>
+    </div>
+  </div>
+</div>
+</body>
+<script src="./js/jquery-1.12.1.js"></script>
+
+</html>

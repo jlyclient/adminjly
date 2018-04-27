@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="./css/default.css">
+</head>
+<body>
+{% module xsrf_form_html() %}
+  <div class="server_title">
+    <img src="./img/title.png" alt="">
+    <div class="server_name">
+      <p>您好 <span style="color: #fff">55555</span></p>
+      <p class="roseword cursor server_logout">退出</p>
+    </div>
+  </div>
+  <div class="server_content">
+    <div class="false_list"></div>
+    <div class="server_list">
+      <p class="list_row"><a href="#"><img STYLE="margin-right: 10px" src="./img/index.png" alt="">首页</a></p>
+      <ul class="list_columnbox">
+        <li class="list_column"><a href="./manager.html">管理员</a></li>
+        <li class="list_column"><a href="./userlist.html">用户列表</a></li>
+        <li class="list_column"><a href="./zhenghun.html">征婚帖</a></li>
+        <li class="list_column"><a href="./yuehui.html">约会贴</a></li>
+      </ul>
+    </div>
+    <div class="server_tablepage">首页暂时没有</div>
+  </div>
+</body>
+  <script src="./js/jquery-1.12.1.js"></script>
+
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>佳良缘后台管理系统</title>
+  <link rel="stylesheet" href="./css/default.css">
+  <link rel="stylesheet" href="./css/login.css">
+</head>
+<body>
+{% module xsrf_form_html() %}
+  <div class="love_login">
+    <img class="love_login_background" src="./img/login.jpg" alt="">
+    <div class="love_login_form">
+      <div class="love_form_title">
+        <img src="./img/login_name.png" alt="">
+      </div>
+      <div class="love_form_center">
+        <div>
+          <span class="line" ></span>
+          <img class="form_img" src="./img/login_user.png" alt="">
+          <input name="user" placeholder="用户名" type="text">
+        </div>
+        <div>
+          <span class="line" ></span>
+          <img class="form_img" src="./img/login_pass.png" alt="">
+          <input name="password" placeholder="用户密码" type="password">
+          <span class="form_err"></span>
+        </div>
+        <div>
+          <span class="form_btn">立即登录</span>
+        </div>
+      </div>
+    </div>
+    <div class="login_bottom">
+      Copyright ©2015-2018   佳良缘企业版权所有
+    </div>
+  </div>
+</body>
+  <script src="./js/jquery-1.12.1.js"></script>
+  <script src="./js/login.js"></script>
+</html>
