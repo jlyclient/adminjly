@@ -32,11 +32,20 @@ class JlyAdmin(Base):
         self.mobile = mobile
         self.sex  = sex
         self.role = 1#0=root  1=admin
-        self.regist_time = regist_time
         self.last_login = last_login
         self.last_login_ip = last_login_ip
         self.valid_state = valid_state
         self.msg  = msg
+        t = time.localtime()
+        now = time.strftime('%Y-%m-%d %H:%M:%S', t)
+        if not regist_time:
+            self.regist_time = now
+        else:
+            self.regist_time = regist_time
+        if not last_login:
+            self.last_login = now
+        else:
+            self.last_login = now
     id            = Column(Integer, primary_key=True)
     name          = Column(String(16))
     password      = Column(String(64))

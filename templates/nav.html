@@ -2,9 +2,11 @@
   <div class="server_list">
     <p class="list_row"><a href="/"><img STYLE="margin-right: 10px" src="./img/index.png" alt="">首页</a></p>
     <ul class="list_columnbox">
+    {% if role == 0 %}
       <li class="list_column active"><a href="/admin">管理员</a></li>
-      <li class="list_column"><a href="/userlist">用户列表</a></li>
+    {% end %}
+      <li class="list_column"><a href="/user_list">用户列表</a></li>
       <li class="list_column"><a href="./zhenghun">征婚帖</a></li>
-      <li class="list_column"><a href="./yuehui">约会贴</a></li>
+      <li class="list_column"><a href="./dating">约会贴</a></li>
     </ul>
   </div>

@@ -4,10 +4,24 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 import hashlib
+import json
+import urllib2
 
 from conf import conf
 from table import *
 from sqlalchemy.sql import and_, or_, not_
+
+def sendemail(uid=None, msg=None):
+    if not uid or not msg:
+        return None
+
+    url = conf.email_url
+    body_value = {"cuid": conf.admin_id,
+                  "uid": uid,
+                  "content": msg, 'kind': 1 }
+    body_value  = json.JSONEncoder().encode(body_value)
+    request = urllib2.Request(url, body_value)
+
 
 def digest(word):
     m2 = hashlib.md5()
@@ -16,7 +30,7 @@ def digest(word):
     token = m2.hexdigest()
     return token
 
-def login_check(mobile=None, password=None):
+def login_check(mobile=None, password=None, ip=None):
     if not mobile or not password:
         return None
     s = DBSession()
@@ -24,15 +38,18 @@ def login_check(mobile=None, password=None):
     c = and_(JlyAdmin.mobile == mobile, JlyAdmin.password==tok)
     r = s.query(JlyAdmin).filter(c).first()
     if r:
+        r.last_login_ip = ip if ip else ''
+        d = r.dic_return()
+        s.commit()
         s.close()
-        return r.dic_return()
+        return d
     s.close()
     return None
 
 def update_password(uid, old, new):
     tok_old = digest(old)
     s = DBSession()
-    r = s.query(JlyAdmin.id == uid).first()
+    r = s.query(JlyAdmin).filter(JlyAdmin.id == uid).first()
     if not r:
         s.close()
         return False
@@ -45,22 +62,49 @@ def update_password(uid, old, new):
     s.close()
     return False
 
-
-def query_admin(uid=None):
-    if not uid:
+def get_role(cuid=None):
+    if not cuid:
+        return -1
+    s = DBSession()
+    r = s.query(JlyAdmin).filter(JlyAdmin.id == cuid).first()
+    if r:
+        s.close()
+        return r.role
+    s.close()
+    return -1
+def query_admin(cuid=None, uid=None):
+    if not cuid or not uid:
         return None
     uid = int(uid)
     s = DBSession()
+    if cuid != uid:
+        ru = s.query(JlyAdmin).filter(JlyAdmin.id == cuid).first()
+        if not ru:
+            s.close()
+            return None
     r = s.query(JlyAdmin).filter(JlyAdmin.id == uid).first()
-    d = None if not r else r.dic_return()
+    if not r:
+        s.close()
+        return None
+    if ru.role <= r.role:
+        s.close()
+        D = r.dic_return()
+        return D
     s.close()
-    return d
+    return None
 
 
-def create_admin(name=None, mobile=None, password=None):
-    if not name or not mobile or not password:
+def create_admin(uid=None, name=None, mobile=None, password=None):
+    if not uid or not name or not mobile or not password:
         return None
     s = DBSession()
+    ru = s.query(JlyAdmin).filter(JlyAdmin.id == uid).first()
+    if not ru:
+        s.close()
+        return None
+    if ru.role != 0:
+        s.close()
+        return None
     r = s.query(JlyAdmin).filter(JlyAdmin.mobile == mobile).first()
     if r:
         s.close()
@@ -95,7 +139,7 @@ def edit_admin(uid=None, name=None, password=None, mobile=None, state=None, s=No
         pass
     else:
         state = int(state)
-        if state in [0, 1]:
+        if state in [0, 1, 2, 3]:
             D[JlyAdmin.valid_state] = state
     if D:
         f = s
@@ -107,16 +151,38 @@ def edit_admin(uid=None, name=None, password=None, mobile=None, state=None, s=No
         s.close()
     return True
 
-def forbid_admin(uid=None):
-    if not uid:
+def forbid_admin(cuid=None, uid=None):
+    if not cuid or not uid:
         return None
+    cuid, uid = int(cuid), int(uid)
+    s = DBSession()
+    r = s.query(JlyAdmin).filter(JlyAdmin.id == cuid).first()
+    ru= s.query(JlyAdmin).filter(JlyAdmin.id == uid).first()
+    if not r or not ru:
+        s.close()
+        return None
+    if r.role >= ru.role:
+        s.close()
+        return None
+    s.close()
     r = edit_admin(uid=uid, state=1)
     return r
 
-def allow_admin(uid=None):
-    if not uid:
+def allow_admin(cuid=None, uid=None):
+    if not cuid or not uid:
         return None
-    r = edit_admin(uid=uid, state=0)
+    cuid, uid = int(cuid), int(uid)
+    s = DBSession()
+    r = s.query(JlyAdmin).filter(JlyAdmin.id == cuid).first()
+    ru= s.query(JlyAdmin).filter(JlyAdmin.id == uid).first()
+    if not r or not ru:
+        s.close()
+        return None
+    if r.role >= ru.role:
+        s.close()
+        return None
+    s.close()
+    r = edit_admin(uid=uid, state=3)
     return r
 
 def list_admin(limit=None, page=None, next_=None):
@@ -125,8 +191,8 @@ def list_admin(limit=None, page=None, next_=None):
     next_ = int(next_) if next_ else 0
    
     s = DBSession()
-    c = and_(JlyAdmin.role != 0)
-    r = s.query(JlyAdmin).limit(limit).offset(page*next_)
+    c = and_(True, JlyAdmin.role != 0)
+    r = s.query(JlyAdmin).filter(c).limit(limit).offset(page*next_)
     D = [e.dic_return() for e in r]
     s.close()
     return D
@@ -153,7 +219,7 @@ def edit_user(uid=None, opt=None, bc=None, state=0):
             return False
     state = int(state)
     if state in [0, 1, 3]:
-        r.state = state
+        r.valid_state = state
         r.msg   = msg
         s.commit()
     s.close()
@@ -161,10 +227,17 @@ def edit_user(uid=None, opt=None, bc=None, state=0):
 
 def forbid_user(uid=None, opt=None, bc=None):
     r = edit_user(uid, opt, bc, 1)
+    if opt:
+        opt = int(opt)
+    msg = conf.reasons[opt] if opt and opt in [0,1,2,3,4] else bc[:128]
+    msg = '你被管理员禁止了,因为%s'%msg
+    sendemail(uid, msg)
     return r
 
 def allow_user(uid=None, opt=None, bc=None):
-    r = edit_user(uid, opt, bc, 3)
+    msg = '解禁'
+    r = edit_user(uid, None, msg, 3)
+    sendemail(uid, '你被管理员解禁了')
     return r
 
 #num: rmb 分
@@ -173,15 +246,17 @@ def chongzhi(uid=None, num=None):
         return None
     s = DBSession()
     uid, num = int(uid), int(float(num)*100)
-    num = int(num/10) if not conf.price else int(num/conf.proce)
+    num = int(num/10) if not conf.price else int(num/conf.price)
     ru = s.query(User).filter(User.id == uid).first()
     if ru:
-        ra = s.query(User_accout).filter(User_accout.id == uid).first()
+        ra = s.query(User_account).filter(User_account.id == uid).first()
         if not ra:
             s.close()
             return None
         ra.num = ra.num + num
         s.commit()
+        msg = '管理员已经为你充值%d示爱豆' % num
+        sendemail(uid, msg)
     s.close()
     return True
 
@@ -195,7 +270,7 @@ def list_user(limit=None, page=None, next_=None):
     ids = [e.id for e in r]
     a_m = {}
     if ids:
-        ra = s.query(User_account).filter(User_accout.id.in_(ids)).all()
+        ra = s.query(User_account).filter(User_account.id.in_(ids)).all()
         if ra:
             for e in ra:
                 a_m[e.id] = e.dic_return()
@@ -239,6 +314,7 @@ def edit_tiezi(oid=None, opt=None, bc=None, state=0, kind=0):
         return False
     if not state and state != 0 and state != '':
         return False
+    oid = int(oid)
     msg = ''
     if opt and int(opt) in [0,1,2,3,4]:
         msg = conf.reasons[opt]
@@ -255,8 +331,8 @@ def edit_tiezi(oid=None, opt=None, bc=None, state=0, kind=0):
         s.close()
         return None 
     state = int(state)
-    if state in [0,1,3]:
-        r.state = state
+    if state in [0,1,2,3]:
+        r.valid_state = state
         r.msg = msg
         s.commit()
     s.close()
@@ -267,11 +343,13 @@ def forbid_zhenghun(zid=None, opt=None, bc=None):
     return r
 
 def allow_zhenghun(oid=None, opt=None, bc=None):
-    r = edit_tiezi(oid, opt, bc, 3, 0)
+    msg='通过'
+    r = edit_tiezi(oid, None, msg, 3, 0)
     return r
 
 def del_zhenghun(oid=None, opt=None, bc=None):
-    r = edit_tiezi(oid, opt, bc, 2, 0)
+    msg = '删除'
+    r = edit_tiezi(oid, None, msg, 2, 0)
     return r
 
 def list_dating(limit=None, page=None, next_=None):
@@ -306,11 +384,13 @@ def forbit_dating(oid=None, opt=None, bc=None):
     return r
 
 def allow_dating(oid=None, opt=None, bc=None):
-    r = edit_tiezi(oid, opt, bc, 3, 1)
+    msg = '通过'
+    r = edit_tiezi(oid, None, msg, 3, 1)
     return r
 
 def del_dating(oid=None, opt=None, bc=None):
-    r = edit_tiezi(oid, opt, bc, 2, 1)
+    msg = '删除'
+    r = edit_tiezi(oid, None, msg, 2, 1)
     return r
 
 def search_user(uid=None):
@@ -319,7 +399,7 @@ def search_user(uid=None):
     uid = int(uid)
     s = DBSession()
     r = s.query(User).filter(User.id == uid).first()
-    ra = s.query(User_accout).filter(User_accout.id == uid).first()
+    ra = s.query(User_account).filter(User_account.id == uid).first()
     D = r.dic_return() if r else {}
     if ra:
         D['num'] = ra.num
@@ -370,10 +450,55 @@ def search_dating(did=None):
     return d
 
 
-if __name__ == '__main__':
-    r = list_user()
-    print(r)
 '''
+    r = login_check('17313615918', 'jly2018!!!')
+    print(r)
+    r = update_password(r['id'], 'jly2018!!!', '123')
+    print(r)
     r = digest('jly2018!!!')
     print(r)
+    r = query_admin(1)
+    print(r)
+    r = create_admin(1, 'jlyadmin', '17313615918', '123')
+    print(r)
+    r = edit_admin(1, 'root')
+    print(r)
+    r = forbid_admin(1, 2)
+    print(r)
+    r = allow_admin(1,2)
+    print(r)
+    r = list_admin()
+    print(r)
+    r = list_user()
+    print(r)
+    r = forbid_user(10, 1, None)
+    print(r)
+    r = allow_user(10, None, 'ok')
+    print(r)
+    r = chongzhi(10, 1.1)
+    print(r)
+    r = list_zhenghun() 
+    print(r)
+    r = forbid_zhenghun(1, 1, None)
+    print(r)
+    r = allow_zhenghun(1, None, None) 
+    print(r)
+    r = del_zhenghun(1)
+    print(r)
+    r = list_dating()
+    print(r)
+    r = forbit_dating(1, 1) 
+    print(r)
+    r = allow_dating(1)
+    print(r)
+    r = del_dating(1)
+    print(r)
+    r = search_user(19)
+    print(r)
+    r = search_zhenghun(1)
+    print(r)
+    r = search_dating(1)
+    print(r)
 '''
+if __name__ == '__main__':
+    pass

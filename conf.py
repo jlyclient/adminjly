@@ -7,6 +7,8 @@ class Picconf():
         p.read(name)
         self.sys_ip      = p.get('sys', 'sys_ip')
         self.sys_port    = p.getint('sys', 'sys_port')
+        self.email_url   = p.get('sys', 'email_url')
+        self.admin_id    = p.get('sys', 'admin_id')
 
         self.digest_salt = p.get('salt', 'digest_salt')
 

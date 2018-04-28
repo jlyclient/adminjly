@@ -2,6 +2,9 @@
 sys_ip=127.0.0.1
 sys_port=8000
 
+email_url=127.0.0.1:9000
+admin_id=1
+
 [salt]
 digest_salt=jlyadmin
 
@@ -49,3 +52,4 @@ dating_html=yuehui.html
 [price]
 #分/个
 price=10
+

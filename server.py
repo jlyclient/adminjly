@@ -47,14 +47,14 @@ class IndexHandler(BaseHandler):
         else:
             try:
                 uid = coo.split('_')[1]
-                u = query_admin(uid)
+                u = query_admin(uid, uid)
                 if not u:
                     self.render(conf.index_html)
                 else:
                     if u['role'] == 0:
                         self.redirect('/admin')
                     else:
-                        self.redirect('/user')
+                        self.redirect('/user_list')
             except:
                 self.clear_cookie('userid')
                 self.redirect('/')
@@ -67,7 +67,8 @@ class IndexHandler(BaseHandler):
             pass
         else:
             d = {'code': -1, 'msg': '用户名或密码错误'}
-            r = login_check(mobile, password)
+            ip = self.request.remote_ip
+            r = login_check(mobile, password, ip)
             if r:
                 d = {'code': 0, 'msg': 'ok', 'data': r}
                 uid = r['id']
@@ -83,7 +84,14 @@ class AdminIndexHandler(BaseHandler):
     def get(self):
         name = self.get_secure_cookie('username')
         D = list_admin()
-        self.render(conf.root_index_html, D=D, name=name)
+        coo = self.get_secure_cookie('userid')
+        uid = coo.split('_')[1]
+        role = get_role(uid)
+        if role < 0:
+            self.clear_cookie('userid')
+            self.clear_cookie('username')
+            self.redirect('/')
+        self.render(conf.root_index_html, D=D, name=name, role=role)
 
     @tornado.web.authenticated
     def post(self):
@@ -137,7 +145,9 @@ class ForbiddenAdminHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
         uid        = self.get_argument('uid', None)
-        r = forbid_admin(uid)
+        coo        = self.get_secure_cookie('userid')
+        cuid       = coo.split('_')[1]
+        r = forbid_admin(cuid, uid)
         d = {'code': -1, 'msg': '参数错误'}
         if r:
             d = {'code': 0, 'msg': 'ok'}
@@ -148,7 +158,9 @@ class AllowAdminHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
         uid        = self.get_argument('uid', None)
-        r = allow_admin(uid)
+        coo        = self.get_secure_cookie('userid')
+        cuid       = coo.split('_')[1]
+        r = allow_admin(cuid, uid)
         d = {'code': -1, 'msg': '参数错误'}
         if r:
             d = {'code': 0, 'msg': 'ok'}
@@ -160,7 +172,14 @@ class UserHandler(BaseHandler):
     def get(self):
         name = self.get_secure_cookie('username')
         D = list_user()
-        self.render(conf.admin_index_html, D=D, name=name)
+        coo = self.get_secure_cookie('userid')
+        uid = coo.split('_')[1]
+        role = get_role(uid)
+        if role < 0:
+            self.clear_cookie('userid')
+            self.clear_cookie('username')
+            self.redirect('/')
+        self.render(conf.admin_index_html, D=D, name=name, role=role)
 
     @tornado.web.authenticated
     def post(self):
@@ -213,8 +232,10 @@ class ChongZhiHandler(BaseHandler):
 class SearchAdminHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
+        coo = self.get_secure_cookie('userid')
+        cuid = coo.split('_')[1]
         uid       = self.get_argument('uid', None)
-        r = query_admin(uid)
+        r = query_admin(cuid, uid)
         d = {'code': -1, 'msg': '参数错误'}
         if r:
             d = {'code': 0, 'msg': 'ok', 'data': r}
@@ -259,8 +280,15 @@ class DatingIndexHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
         D = list_dating()
+        coo = self.get_secure_cookie('userid')
+        uid = coo.split('_')[1]
+        role = get_role(uid)
         name = self.get_secure_cookie('username')
-        self.render(conf.dating_html, D=D, name=name)
+        if role < 0:
+            self.clear_cookie('userid')
+            self.clear_cookie('username')
+            self.redirect('/')
+        self.render(conf.dating_html, D=D, name=name, role=role)
 
     @tornado.web.authenticated
     def post(self):
@@ -316,7 +344,14 @@ class ZhenghunIndexHandler(BaseHandler):
     def get(self):
         D = list_zhenghun()
         name = self.get_secure_cookie('username')
-        self.render(conf.zhenghun_html, D=D, name=name)
+        coo = self.get_secure_cookie('userid')
+        uid = coo.split('_')[1]
+        role = get_role(uid)
+        if role < 0:
+            self.clear_cookie('userid')
+            self.clear_cookie('username')
+            self.redirect('/')
+        self.render(conf.zhenghun_html, D=D, name=name, role=role)
 
     @tornado.web.authenticated
     def post(self):
