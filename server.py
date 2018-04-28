@@ -210,41 +210,41 @@ class ChongZhiHandler(BaseHandler):
         d = json.dumps(d)
         self.write(d)
 
-class SearchAdmin(BaseHandler):
+class SearchAdminHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
         uid       = self.get_argument('uid', None)
         r = query_admin(uid)
         d = {'code': -1, 'msg': '参数错误'}
         if r:
-            d = {'code': 0, 'msg': 'ok'}
+            d = {'code': 0, 'msg': 'ok', 'data': r}
         d = json.dumps(d)
         self.write(d)
 
-class SearchUser(BaseHandler):
+class SearchUserHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
         uid       = self.get_argument('uid', None)
         r = search_user(uid)
         d = {'code': -1, 'msg': '参数错误'}
         if r:
-            d = {'code': 0, 'msg': 'ok'}
+            d = {'code': 0, 'msg': 'ok', 'data': r}
         d = json.dumps(d)
         self.write(d)
 
-class SearchZhenghun(BaseHandler):
+class SearchZhenghunHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
         zid       = self.get_argument('zid', None)
         r = search_zhenghun(zid)
         d = {'code': -1, 'msg': '参数错误'}
         if r:
-            d = {'code': 0, 'msg': 'ok'}
+            d = {'code': 0, 'msg': 'ok', 'data': r}
         d = json.dumps(d)
         self.write(d)
 
 
-class SearchDating(BaseHandler):
+class SearchDatingHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
         did       = self.get_argument('did', None)
@@ -331,10 +331,10 @@ class ZhenghunIndexHandler(BaseHandler):
 class ForbiddenZhenghunHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
-        did  = self.get_argument('did', None)
+        zid  = self.get_argument('zid', None)
         opt  = self.get_argument('option', None)
         bc   = self.get_argument('buchong', None)
-        r = forbit_zhenghun(did, opt, bc)
+        r = forbid_zhenghun(zid, opt, bc)
         d = {'code': -1, 'msg': '参数不对'}
         if r:
             d = {'code': 0, 'msg': 'ok'}
@@ -345,10 +345,10 @@ class ForbiddenZhenghunHandler(BaseHandler):
 class AllowZhenghunHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
-        did  = self.get_argument('did', None)
+        zid  = self.get_argument('zid', None)
         opt  = self.get_argument('option', None)
         bc   = self.get_argument('buchong', None)
-        r = allow_zhenghun(did, opt, bc)
+        r = allow_zhenghun(zid, opt, bc)
         d = {'code': -1, 'msg': '参数不对'}
         if r:
             d = {'code': 0, 'msg': 'ok'}
@@ -358,9 +358,24 @@ class AllowZhenghunHandler(BaseHandler):
 class DelZhenghunHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
-        did = self.get_argument('did', None)
-        r = del_zhenghun(did, opt, bc)
+        zid = self.get_argument('zid', None)
+        r = del_zhenghun(zid, opt, bc)
         d = {'code': -1, 'msg': '参数不对'}
+        if r:
+            d = {'code': 0, 'msg': 'ok'}
+        d = json.dumps(d)
+        self.write(d)
+
+class UpdatePasswordHandler(BaseHandler):
+    @tornado.web.authenticated
+    def post(self):
+        coo  = self.get_secure_cookie('userid')
+        uid  = coo.split('_')[1]
+        oldpassword    = self.get_argument('oldpassword', None)
+        newpassword    = self.get_argument('newpassword', None)
+
+        d = {'code': -1, 'msg': '参数错误'}
+        r = update_password(uid, oldpassword, newpassword)
         if r:
             d = {'code': 0, 'msg': 'ok'}
         d = json.dumps(d)
@@ -388,9 +403,28 @@ if __name__ == "__main__":
         (r"/img/(.*)", StaticFileHandler, {"path": "static/img"}), 
         ('/', IndexHandler),
         ('/admin', AdminIndexHandler),
-        ('/userlist', UserHandler),
+        ('/create_admin', CreateAdminHandler),
+        ('/del_admin', DelAdminHandler),
+        ('/edit_admin', EditAdminHandler),
+        ('/forbid_admin', ForbiddenAdminHandler),
+        ('/allow_admin', AllowAdminHandler),
+        ('/user_list', UserHandler),
+        ('/forbid_user', ForbiddenUserHandler),
+        ('/allow_user', AllowUserHandler),
+        ('/chongzhi', ChongZhiHandler),
+        ('/search_admin', SearchAdminHandler),
+        ('/forbid_zhenghun', ForbiddenZhenghunHandler),
+        ('/allow_zhenghun', AllowZhenghunHandler),
+        ('/del_zhenghun', DelZhenghunHandler),
+        ('/search_user', SearchUserHandler),
         ('/zhenghun', ZhenghunIndexHandler),
-        ('/yuehui', DatingIndexHandler),
+        ('/search_zhenghun', SearchZhenghunHandler),
+        ('/dating', DatingIndexHandler),
+        ('/search_dating', SearchDatingHandler),
+        ('/forbid_dating', ForbiddenDatingHandler),
+        ('/allow_dating', AllowDatingHandler),
+        ('/del_dating', DelDatingHandler),
+        ('/update_password', UpdatePasswordHandler),
         ('/logout', LogoutHandler),
               ]
     application = tornado.web.Application(handler, **settings)

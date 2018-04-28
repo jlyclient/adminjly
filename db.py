@@ -29,6 +29,23 @@ def login_check(mobile=None, password=None):
     s.close()
     return None
 
+def update_password(uid, old, new):
+    tok_old = digest(old)
+    s = DBSession()
+    r = s.query(JlyAdmin.id == uid).first()
+    if not r:
+        s.close()
+        return False
+    if r.password == tok_old:
+        tok_new = digest(new)
+        r.password = tok_new
+        s.commit()
+        s.close()
+        return True
+    s.close()
+    return False
+
+
 def query_admin(uid=None):
     if not uid:
         return None
@@ -155,7 +172,7 @@ def chongzhi(uid=None, num=None):
     if not uid or not num:
         return None
     s = DBSession()
-    uid, num = int(uid), int(num)*100
+    uid, num = int(uid), int(float(num)*100)
     num = int(num/10) if not conf.price else int(num/conf.proce)
     ru = s.query(User).filter(User.id == uid).first()
     if ru:
@@ -175,8 +192,21 @@ def list_user(limit=None, page=None, next_=None):
 
     s = DBSession()
     r = s.query(User).limit(limit).offset(page*next_)
-    D = [e.dic_return() for e in r]
+    ids = [e.id for e in r]
+    a_m = {}
+    if ids:
+        ra = s.query(User_account).filter(User_accout.id.in_(ids)).all()
+        if ra:
+            for e in ra:
+                a_m[e.id] = e.dic_return()
     s.close()
+    D = []
+    for e in r:
+        t = e.dic_return()
+        a = a_m.get(e.id)
+        t['num'] = 0 if not a else a.get('num', 0)
+        t['free'] = 0 if not a else a.get('free', 0)
+        D.append(t)
     return D
 
 def list_zhenghun(limit=None, page=None, next_=None):
@@ -232,8 +262,8 @@ def edit_tiezi(oid=None, opt=None, bc=None, state=0, kind=0):
     s.close()
     return True
 
-def forbit_zhenghun(oid=None, opt=None, bc=None):
-    r = edit_tiezi(oid, opt, bc, 1, 0)
+def forbid_zhenghun(zid=None, opt=None, bc=None):
+    r = edit_tiezi(zid, opt, bc, 1, 0)
     return r
 
 def allow_zhenghun(oid=None, opt=None, bc=None):
@@ -262,9 +292,11 @@ def list_dating(limit=None, page=None, next_=None):
     for e in r:
         t = e.dic_return()
         if u_m.get(e.userid):
-            t['valid_state'] = u_m[e.userid]['valid_state']
+            t['user_valid_state'] = u_m[e.userid]['valid_state']
+            t['nick_name'] = u_m[e.userid]['nick_name']
         else:
-            t['valid_state'] = -1
+            t['user_valid_state'] = -1
+            t['nick_name'] = ''
         D.append(t)
     s.close()
     return D
@@ -284,9 +316,14 @@ def del_dating(oid=None, opt=None, bc=None):
 def search_user(uid=None):
     if not uid:
         return None
+    uid = int(uid)
     s = DBSession()
     r = s.query(User).filter(User.id == uid).first()
+    ra = s.query(User_accout).filter(User_accout.id == uid).first()
     D = r.dic_return() if r else {}
+    if ra:
+        D['num'] = ra.num
+        D['free'] = ra.free
     s.close()
     return D
 
@@ -301,10 +338,13 @@ def search_zhenghun(zid=None):
     uid = r.userid
     ru = s.query(User).filter(User.id == uid).first()
     v_d = -1
+    username = ''
     if ru:
         v_d = ru.valid_state
+        username = ru.nick_name
     d = r.dic_return()
-    d['valid_state'] = v_d
+    d['user_valid_state'] = v_d
+    d['user_name'] = username
     s.close()
     return d
 
@@ -318,11 +358,14 @@ def search_dating(did=None):
         return None
     uid = r.userid
     ru = s.query(User).filter(User.id == uid).first()
-    v_d = -1
+    v_d = 0
+    name = ''
     if ru:
         v_d = ru.valid_state
+        name = ru.nick_name
     d = r.dic_return()
-    d['valid_state'] = v_d
+    d['user_valid_state'] = v_d
+    d['nick_name'] = name
     s.close()
     return d
 

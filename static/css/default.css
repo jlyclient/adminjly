@@ -2,8 +2,13 @@
     padding:0;
     margin:0;
     box-sizing: border-box;
+    /*color: #707070;*/
 }
 a{
+    text-decoration: none;
+    color: #fff;
+}
+a:hover {
     text-decoration: none;
     color: #fff;
 }
@@ -134,7 +139,7 @@ input:focus {
     line-height: 28px;
     font-size: 14px;
 }
-.openup_zhenghun, .close_zhenghun, .server_recharge, .del_user{
+.openup_zhenghun, .close_zhenghun, .server_recharge, .del_user, .add_root{
     display: none;
 }
 .popup{
@@ -166,6 +171,11 @@ input:focus {
 .recharge_content{
     width:370px;
     height:164px;
+    padding:0;
+}
+.addroot_content{
+    width:370px;
+    height: 275px;
     padding:0;
 }
 .popup_content{
@@ -249,6 +259,18 @@ input:focus {
 .zhenghun_form_row select, .zhenghun_form_row textarea{
     width:300px;
 }
+.addroot_form{
+    text-align: center;
+    color: #555555;
+    font-size: 14px;
+}
+.addroot_form > div{
+    margin-top:20px;
+}
+.addroot_form input{
+    width:200px;
+    height:32px;
+}
 .zhenghun_btn{
     justify-content: center;
 }
@@ -266,4 +288,33 @@ input:focus {
 .zhenghun_btn span.active{
     background: #fff;
     color: #f13774;
+}
+
+.batch_btn{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin: 20px 0 10px 0;
+}
+.roseword_btn{
+    display: inline-block;
+    width:70px;
+    height:24px;
+    border:1px solid #f13774;
+    color: #f13774;
+    text-align: center;
+    line-height: 22px;
+    margin-right:20px;
+}
+.show_pagenumber{
+    width: 60px;
+    height:26px;
+}
+.table_box{
+    margin-top:10px;
+}
+.table_box th , .table_box td{
+    text-align: center;
+    font-weight: 500;
 }
