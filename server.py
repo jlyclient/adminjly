@@ -106,10 +106,12 @@ class AdminIndexHandler(BaseHandler):
 class CreateAdminHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
+        coo = self.get_secure_cookie('userid')
+        cuid     = coo.split('_')[1]
         name    = self.get_argument('name',   None)
         mobile  = self.get_argument('mobile', None)
         password= self.get_argument('password', None)
-        r = create_admin(name, mobile, password)
+        r = create_admin(cuid, name, mobile, password)
         d = {'code': -1, 'msg': '参数错误'}
         if r:
             d = {'code': 0, 'msg': 'ok'}
@@ -119,8 +121,10 @@ class CreateAdminHandler(BaseHandler):
 class DelAdminHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
+        coo = self.get_secure_cookie('userid')
+        cuid     = coo.split('_')[1]
         uid = self.get_argument('uid', None)
-        r = del_admin(uid)
+        r = del_admin(cuid, uid)
         d = {'code': -1, 'msg': '参数错误'}
         if r:
             d = {'code': 0, 'msg': 'ok'}
@@ -130,11 +134,13 @@ class DelAdminHandler(BaseHandler):
 class EditAdminHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
+        coo = self.get_secure_cookie('userid')
+        cuid     = coo.split('_')[1]
         uid      = self.get_argument('uid', None)
         name     = self.get_argument('name', None)
         password = self.get_argument('password', None)
         mobile   = self.get_argument('mobile', None)
-        r = edit_admin(uid, name, password, mobile)
+        r = edit_admin(cuid, uid, name, password, mobile)
         d = {'code': -1, 'msg': '参数错误'}
         if r:
             d = {'code': 0, 'msg': 'ok'}

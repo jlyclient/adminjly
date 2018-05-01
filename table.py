@@ -301,6 +301,42 @@ class User_account(Base):
     def dic_return(self):
         return {'id': self.id,   'num': self.num, 'free': self.free}
 #################################################################
+class Email(Base):
+    __tablename__ = conf.table_email
+    def __init__(self, id_=0, f=0, t=0, c='', k=0, t_=None):
+        if not t_:
+            t_   = time.localtime()
+            now  = time.strftime('%Y-%m-%d %H:%M:%S', t_)
+            self.time_ = now
+        else:
+            self.time_ = t_
+        self.id      = id_
+        self.from_id = f
+        self.to_id   = t
+        self.content = c
+        self.kind    = k
+        self.from_del = 0
+        self.to_del  = 0
+        self.read_   = 0
 
-__all__=['DBSession', 'JlyAdmin', 'User', 'Dating', 'User_account', 'Zhenghun']
+    id           = Column(Integer, primary_key=True)
+    from_id      = Column(Integer)
+    to_id        = Column(Integer)
+    content      = Column(String(256))
+    kind         = Column(Integer)
+    from_del     = Column(Integer)
+    to_del       = Column(Integer)
+    read_        = Column(Integer)
+    time_        = Column(TIMESTAMP)
+    def dic_return(self):
+        return {'id': self.id,        'from_id': self.from_id,
+                'to_id': self.to_id,  'content': self.content,
+                'kind': self.kind,    'read': self.read_,
+                'time': str(self.time_)}
+
+
+#################################################################
+
+__all__=['DBSession', 'JlyAdmin', 'User', 'Dating', 'User_account',
+         'Zhenghun', 'Email']
 

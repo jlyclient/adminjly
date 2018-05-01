@@ -17,6 +17,7 @@ class Picconf():
         self.table_dating       = p.get('table', 'table_dating')
         self.table_zhenghun     = p.get('table', 'table_zhenghun')
         self.table_user_account = p.get('table', 'table_user_account')
+        self.table_email        = p.get('table', 'table_email')
 
         self.admin_page        = p.getint('offset', 'admin_page')
         self.admin_limit       = p.getint('offset', 'admin_limit')
