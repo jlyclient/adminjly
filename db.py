@@ -282,7 +282,7 @@ def list_user(limit=None, page=None, next_=None):
         t['num'] = 0 if not a else a.get('num', 0)
         t['free'] = 0 if not a else a.get('free', 0)
         D.append(t)
-    return D
+    return {'page':page, 'limit': limit, 'next': next_, 'data':D}
 
 def list_zhenghun(limit=None, page=None, next_=None):
     limit = int(limit) if limit else conf.zhenghun_limit
@@ -307,7 +307,7 @@ def list_zhenghun(limit=None, page=None, next_=None):
             t['valid_state'] = -1
         D.append(t)
     s.close()
-    return D
+    return {'page':page, 'limit': limit, 'next': next_, 'data':D}
 #kind=0 zhenghun  kind=1 dating
 def edit_tiezi(oid=None, opt=None, bc=None, state=0, kind=0):
     if not oid:
@@ -377,7 +377,7 @@ def list_dating(limit=None, page=None, next_=None):
             t['nick_name'] = ''
         D.append(t)
     s.close()
-    return D
+    return {'page':page, 'limit': limit, 'next': next_, 'data':D}
 
 def forbit_dating(oid=None, opt=None, bc=None):
     r = edit_tiezi(oid, opt, bc, 1, 1)
