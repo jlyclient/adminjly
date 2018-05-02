@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>root</title>
+
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
   <link rel="stylesheet" href="./css/default.css">
 </head>
 <body>
@@ -19,9 +21,53 @@
 {% include "./nav.html" %}
 
 
-  <div class="server_tablepage">首页暂时没有</div>
+  <div class="server_tablepage">
+    <div class="batch_btn">
+      <p>
+        <span class="roseword_btn cursor">批量删除</span>
+        <span class="roseword_btn cursor">发送邮件</span>
+      </p>
+      <p>
+        每页显示信息数
+        <select class="show_pagenumber" name="">
+          <option value="10">10</option>
+        </select>
+      </p>
+    </div>
+    <div class="table_box">
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th><input type="checkbox">选择</th>
+          <th>姓名</th>
+          <th>电话</th>
+          <th>密码</th>
+          <th>登陆时间</th>
+          <th>登陆IP</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+        <tbody class="table_tbody">
+        <!-- <tr>
+          <th><input type="checkbox"></th>
+          <th>aa</th>
+          <th>111</th>
+          <th>222</th>
+          <th>333</th>
+          <th>444</th>
+          <th>
+            <span class="cursor">编辑</span>
+            <span class="cursor">创建</span>
+            <span class="cursor">删除</span>
+          </th>
+        </tr> -->
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 </body>
 <script src="./js/jquery-1.12.1.js"></script>
-
+<script src="./js/default.js"></script>
+<script src="./js/root.js"></script>
 </html>

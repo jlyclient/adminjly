@@ -318,3 +318,6 @@ input:focus {
     text-align: center;
     font-weight: 500;
 }
+.table-bordered>thead>tr>th {
+    border-bottom: 0;
+}

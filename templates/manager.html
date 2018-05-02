@@ -17,10 +17,25 @@
   <div class="false_list"></div>
 {% include "./nav.html" %}
   <div class="server_tablepage">
+      <div class="server_searchbox">
+          <p class="searchbox_title"><img src="./img/search.png" alt="">筛选</p>
+          <div class="searchbox_center">
+            <p class="search_condition">
+              <span>ID：</span>
+              <input type="text">
+            </p>
+            <p class="search_condition">
+              <span>昵称：</span>
+              <input type="text">
+            </p>
+          </div>
+          <p class="search_btnbox">
+            <span class="search_btn cursor">搜索</span>
+          </p>
+        </div>
     <div class="batch_btn">
       <p>
         <span class="roseword_btn cursor">批量删除</span>
-        <span class="roseword_btn cursor">发送邮件</span>
       </p>
       <p>
         每页显示信息数
@@ -34,16 +49,19 @@
         <thead>
           <tr>
             <th><input type="checkbox">选择</th>
-            <th>姓名</th>
-            <th>电话</th>
-            <th>密码</th>
-            <th>登陆时间</th>
-            <th>登录IP</th>
-            <th>操作</th>
+          <th>ID</th>
+          <th>昵称</th>
+          <th>状态</th>
+          <th>MSG</th>
+          <th>充值余额</th>
+          <th>赠送余额</th>
+          <th>登陆时间</th>
+          <th>登录IP</th>
+          <th>操作</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
+        <tbody class="table_tbody">
+          <!-- <tr>
             <th><input type="checkbox"></th>
             <th>aa</th>
             <th>111</th>
@@ -55,7 +73,7 @@
               <span class="cursor">创建</span>
               <span class="cursor">删除</span>
             </th>
-          </tr>
+          </tr> -->
         </tbody>
       </table>
     </div>
@@ -64,4 +82,6 @@
 </body>
 <script src="./js/jquery-1.12.1.js"></script>
 <script src="./js/bootstrap.min.js"></script>
+<script src="./js/default.js"></script>
+<script src="./js/userlist.js"></script>
 </html>

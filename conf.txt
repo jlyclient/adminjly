@@ -19,7 +19,7 @@ table_email=email
 [mysql]
 mysql_user=root
 mysql_password=tq1985$$$
-mysql_host=127.0.0.1
+mysql_host=47.94.105.76
 mysql_port=3306
 mysql_db=jly
 mysql_encode=utf-8
