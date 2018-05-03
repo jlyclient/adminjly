@@ -11,13 +11,14 @@ import urllib2
 from conf import conf
 from table import *
 from sqlalchemy.sql import and_, or_, not_
+from sqlalchemy import desc
 
 def sendemail(uid=None, msg=None):
     if not uid or not msg:
         return None
 
     url = conf.email_url
-    body_value = {"cuid": 0,#conf.admin_id,
+    body_value = {"cuid": conf.admin_id,
                   "uid": uid,
                   "content": msg, 'kind': 1 }
     body_value  = urllib.urlencode(body_value)
