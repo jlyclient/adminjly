@@ -121,6 +121,7 @@ input:focus {
 }
 .search_condition{
     margin-right:50px;
+    margin-bottom: 0;
 }
 .search_condition input{
     width:150px;

@@ -42,20 +42,21 @@ function getAdmin(limt, page, next, callback) {
       var jsondata = JSON.parse(json);
       console.log(jsondata);
       if (jsondata.code == 0) {
+        var jsonhtml = json
         var tablehtml = '';
         $(".table_tbody").empty();
-        for (var i = 0; i< jsondata.data.length; i++) {
+        for (var i = 0; i< jsondata.data.data.length; i++) {
           tablehtml += '<tr>'+
-          '<th><input name='+ jsondata.data[i].id +' type="checkbox"></th>'+
-          '<th>'+ jsondata.data[i].name +'</th>'+
-          '<th>'+ jsondata.data[i].mobile +'</th>'+
-          '<th>'+ jsondata.data[i].password +'</th>'+
-          '<th>'+ jsondata.data[i].last_login +'</th>'+
-          '<th>'+ jsondata.data[i].last_login_ip +'</th>'+
+          '<th><input name='+ jsondata.data.data[i].id +' type="checkbox"></th>'+
+          '<th>'+ jsondata.data.data[i].name +'</th>'+
+          '<th>'+ jsondata.data.data[i].mobile +'</th>'+
+          '<th>'+ jsondata.data.data[i].password +'</th>'+
+          '<th>'+ jsondata.data.data[i].last_login +'</th>'+
+          '<th>'+ jsondata.data.data[i].last_login_ip +'</th>'+
           '<th>'+
-            '<span name='+ jsondata.data[i].id +' class="cursor">编辑</span>'+
-            '<span name='+ jsondata.data[i].id +' class="cursor">创建</span>'+
-            '<span name='+ jsondata.data[i].id +' class="cursor">删除</span>'+
+            '<span name='+ jsondata.data.data[i].id +' class="cursor">编辑</span>'+
+            '<span name='+ jsondata.data.data[i].id +' class="cursor">创建</span>'+
+            '<span name='+ jsondata.data.data[i].id +' class="cursor">删除</span>'+
           '</th>'+
         '</tr>';
         }
@@ -90,22 +91,22 @@ function getUserlist(limt, page, next, callback) {
         console.log(jsondata);
         $(".table_tbody").empty();
         var valid_state = ['待审核', '被禁止', '删除', '审核通过'];
-        for (var i = 0; i < jsondata.data.length; i++) {
+        for (var i = 0; i < jsondata.data.data.length; i++) {
           tablehtml += '<tr>'+
-          '<th><input name='+ jsondata.data[i].id +' type="checkbox"></th>'+
-          '<th>'+ jsondata.data[i].id +'</th>'+
-          '<th>'+ jsondata.data[i].nick_name +'</th>'+
-          '<th>'+ valid_state[jsondata.data[i].valid_state] +'</th>'+
-          '<th>'+ jsondata.data[i].msg +'</th>'+
-          '<th>'+ jsondata.data[i].num +'</th>'+
-          '<th>'+ jsondata.data[i].free +'</th>'+
-          '<th>'+ jsondata.data[i].last_login +'</th>'+
-          '<th>'+ jsondata.data[i].last_login_ip +'</th>'+
+          '<th><input name='+ jsondata.data.data[i].id +' type="checkbox"></th>'+
+          '<th>'+ jsondata.data.data[i].id +'</th>'+
+          '<th>'+ jsondata.data.data[i].nick_name +'</th>'+
+          '<th>'+ valid_state[jsondata.data.data[i].valid_state] +'</th>'+
+          '<th>'+ jsondata.data.data[i].msg +'</th>'+
+          '<th>'+ jsondata.data.data[i].num +'</th>'+
+          '<th>'+ jsondata.data.data[i].free +'</th>'+
+          '<th>'+ jsondata.data.data[i].last_login +'</th>'+
+          '<th>'+ jsondata.data.data[i].last_login_ip +'</th>'+
           '<th>'+
-            '<span name='+ jsondata.data[i].id +' class="cursor">充值</span>'+
-            '<span name='+ jsondata.data[i].id +' class="cursor">禁止</span>'+
-            '<span name='+ jsondata.data[i].id +' class="cursor">开通</span>'+
-            '<span name='+ jsondata.data[i].id +' class="cursor">删除</span>'+
+            '<span name='+ jsondata.data.data[i].id +' class="cursor">充值</span>'+
+            '<span name='+ jsondata.data.data[i].id +' class="cursor">禁止</span>'+
+            '<span name='+ jsondata.data.data[i].id +' class="cursor">开通</span>'+
+            '<span name='+ jsondata.data.data[i].id +' class="cursor">删除</span>'+
           '</th>'+
         '</tr>';
         }
