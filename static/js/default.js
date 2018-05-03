@@ -53,10 +53,9 @@ function getAdmin(limt, page, next, callback) {
           '<th>'+ jsondata.data.data[i].password +'</th>'+
           '<th>'+ jsondata.data.data[i].last_login +'</th>'+
           '<th>'+ jsondata.data.data[i].last_login_ip +'</th>'+
-          '<th>'+
+          '<th class="table_btn">'+
             '<span name='+ jsondata.data.data[i].id +' class="cursor">编辑</span>'+
-            '<span name='+ jsondata.data.data[i].id +' class="cursor">创建</span>'+
-            '<span name='+ jsondata.data.data[i].id +' class="cursor">删除</span>'+
+            '<span name='+ jsondata.data.data[i].id +' class="cursor del_root">删除</span>'+
           '</th>'+
         '</tr>';
         }
@@ -102,7 +101,7 @@ function getUserlist(limt, page, next, callback) {
           '<th>'+ jsondata.data.data[i].free +'</th>'+
           '<th>'+ jsondata.data.data[i].last_login +'</th>'+
           '<th>'+ jsondata.data.data[i].last_login_ip +'</th>'+
-          '<th>'+
+          '<th class="table_btn">'+
             '<span name='+ jsondata.data.data[i].id +' class="cursor">充值</span>'+
             '<span name='+ jsondata.data.data[i].id +' class="cursor">禁止</span>'+
             '<span name='+ jsondata.data.data[i].id +' class="cursor">开通</span>'+

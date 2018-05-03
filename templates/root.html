@@ -26,6 +26,7 @@
       <p>
         <span class="roseword_btn cursor">批量删除</span>
         <span class="roseword_btn cursor">发送邮件</span>
+        <span class="roseword_btn cursor creat_root">创建</span>
       </p>
       <p>
         每页显示信息数
@@ -66,6 +67,52 @@
     </div>
   </div>
 </div>
+<!--添加或者修改管理员-->
+<div class="popup add_root">
+    <div class="popupshaw"></div>
+    <div class="popup_content addroot_content">
+      <div class="recharge_title">
+        <span>
+          创建
+        </span>
+        <p class="popup_close">
+          <img onclick="closePopup(this, '.add_root')" class="cursor" src="./img/w_close.png" alt="">
+        </p>
+      </div>
+      <div class="addroot_form">
+        <div>
+          姓名：<input name="name" type="text">
+        </div>
+        <div>
+          电话：<input name="mobile" type="text">
+        </div>
+        <div>
+          密码：<input name="password" type="text">
+        </div>
+      </div>
+      <div class="zhenghun_form_row zhenghun_btn">
+        <span class="cursor sure_creat_root">确定</span>
+        <span onclick="closePopup(this, '.add_root')" class="active cursor close_popup_btn">取消</span>
+      </div>
+    </div>
+  </div>
+  <!--删除用户-->
+<div class="del_user popup">
+    <div class="popupshaw"></div>
+    <div class="popup_content deluser_content">
+      <p class="popup_close">
+        <img onclick="closePopup(this, '.del_user')" class="cursor" src="./img/close.png" alt="">
+      </p>
+      <div class="deluser_title">
+        <p class="deluser_flex"><img class="notice_img" src="./img/notice.png" alt="">确认删除信息？</p>
+        <p class="deluser_noticeword">信息删除后将无法恢复。</p>
+      </div>
+      <div class="zhenghun_form_row zhenghun_btn">
+        <span class="cursor sure_del_root">确定</span>
+        <span onclick="closePopup(this, '.del_user')" class="active cursor close_popup_btn">取消</span>
+      </div>
+    </div>
+  </div>
 </body>
 <script src="./js/jquery-1.12.1.js"></script>
 <script src="./js/default.js"></script>

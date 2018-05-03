@@ -4,6 +4,9 @@
     box-sizing: border-box;
     /*color: #707070;*/
 }
+p {
+    margin: 0 0 0 0;
+}
 a{
     text-decoration: none;
     color: #fff;
@@ -321,4 +324,7 @@ input:focus {
 }
 .table-bordered>thead>tr>th {
     border-bottom: 0;
+}
+.table_btn span{
+    margin: 0 6px;
 }
