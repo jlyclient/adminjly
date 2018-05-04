@@ -7,6 +7,7 @@ import hashlib
 import json
 import urllib
 import urllib2
+import time
 
 from conf import conf
 from table import *
@@ -40,7 +41,10 @@ def login_check(mobile=None, password=None, ip=None):
     c = and_(JlyAdmin.mobile == mobile, JlyAdmin.password==tok)
     r = s.query(JlyAdmin).filter(c).first()
     if r:
+        t = time.localtime()
+        now = time.strftime('%Y-%m-%d %H:%M:%S', t)
         r.last_login_ip = ip if ip else ''
+        r.last_login = now
         d = r.dic_return()
         s.commit()
         s.close()
@@ -96,7 +100,7 @@ def query_admin(cuid=None, uid=None):
     return None
 
 
-def create_admin(uid=None, name=None, mobile=None, password=None):
+def create_admin(uid=None, name=None, mobile=None, password=None, ip=None):
     if not uid or not name or not mobile or not password:
         return None
     s = DBSession()
@@ -112,7 +116,11 @@ def create_admin(uid=None, name=None, mobile=None, password=None):
         s.close()
         return None
     tok = digest(password)
-    u = JlyAdmin(name=name, mobile=mobile, password=tok)
+    u = None
+    if ip:
+        u = JlyAdmin(name=name, mobile=mobile, password=tok, last_login_ip=ip)
+    else:
+        u = JlyAdmin(name=name, mobile=mobile, password=tok)
     s.add(u)
     s.commit()
     s.close()
