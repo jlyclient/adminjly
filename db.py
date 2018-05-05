@@ -207,10 +207,11 @@ def list_admin(limit=None, page=None, next_=None, kind=None):
         kind = int(kind)
     s = DBSession()
     c = and_(True, JlyAdmin.role != 0)
+    N = s.query(JlyAdmin).filter(c).filter(JlyAdmin.valid_state == kind).count()
     r = s.query(JlyAdmin).filter(c).filter(JlyAdmin.valid_state == kind).order_by(desc(JlyAdmin.regist_time)).limit(limit).offset(page*next_)
     D = [e.dic_return() for e in r]
     s.close()
-    return {'page': page, 'limit':limit, 'next':next_, 'data': D}
+    return {'page': page, 'limit':limit, 'next':next_, 'data': D, 'count': N}
 
 
 def edit_user(uid=None, opt=None, bc=None, state=0):
@@ -289,6 +290,7 @@ def list_user(limit=None, page=None, next_=None, kind=None):
     else:
         kind = int(kind)
     s = DBSession()
+    N = s.query(User).filter(User.valid_state == kind).count()
     r = s.query(User).filter(User.valid_state == kind).order_by(desc(User.regist_time)).limit(limit).offset(page*next_)
     ids = [e.id for e in r]
     a_m = {}
@@ -305,7 +307,7 @@ def list_user(limit=None, page=None, next_=None, kind=None):
         t['num'] = 0 if not a else a.get('num', 0)
         t['free'] = 0 if not a else a.get('free', 0)
         D.append(t)
-    return {'page':page, 'limit': limit, 'next': next_, 'data':D}
+    return {'page':page, 'limit': limit, 'next': next_, 'data':D, 'count':N}
 
 def list_zhenghun(limit=None, page=None, next_=None, kind=None):
     limit = int(limit) if limit else conf.zhenghun_limit
@@ -319,6 +321,7 @@ def list_zhenghun(limit=None, page=None, next_=None, kind=None):
     else:
         kind = int(kind)
     s = DBSession()
+    N = s.query(Zhenghun).filter(Zhenghun.valid_state == kind).count()
     r = s.query(Zhenghun).filter(Zhenghun.valid_state == kind).order_by(desc(Zhenghun.time_)).limit(limit).offset(page*next_)
     ids = [e.userid for e in r]
     u_m = {}
@@ -336,7 +339,7 @@ def list_zhenghun(limit=None, page=None, next_=None, kind=None):
             t['valid_state'] = -1
         D.append(t)
     s.close()
-    return {'page':page, 'limit': limit, 'next': next_, 'data':D}
+    return {'page':page, 'limit': limit, 'next': next_, 'data':D, 'count':N}
 #kind=0 zhenghun  kind=1 dating
 def edit_tiezi(oid=None, opt=None, bc=None, state=0, kind=0):
     if not oid:
@@ -396,6 +399,7 @@ def list_dating(limit=None, page=None, next_=None, kind=None):
         kind = int(kind)
 
     s = DBSession()
+    N = s.query(Dating).filter(Dating.valid_state == kind).count()
     r = s.query(Dating).filter(Dating.valid_state == kind).order_by(desc(Dating.time_)).limit(limit).offset(page*next_)
     ids = [e.userid for e in r]
     u_m = {}
@@ -415,7 +419,7 @@ def list_dating(limit=None, page=None, next_=None, kind=None):
             t['nick_name'] = ''
         D.append(t)
     s.close()
-    return {'page':page, 'limit': limit, 'next': next_, 'data':D}
+    return {'page':page, 'limit': limit, 'next': next_, 'data':D, 'count':N}
 
 def forbit_dating(oid=None, opt=None, bc=None):
     r = edit_tiezi(oid, opt, bc, 1, 1)
