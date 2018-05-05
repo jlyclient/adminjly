@@ -328,3 +328,11 @@ input:focus {
 .table_btn span{
     margin: 0 6px;
 }
+
+
+/* page */
+
+.love_page {
+    text-align: center;
+    margin: 20px 0;
+}

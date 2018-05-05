@@ -42,6 +42,7 @@ function getAdmin(limt, page, next, callback) {
       var jsondata = JSON.parse(json);
       console.log(jsondata);
       if (jsondata.code == 0) {
+        callback(Math.ceil(jsondata.data.data.count / jsondata.data.data.page), next);
         var jsonhtml = json
         var tablehtml = '';
         $(".table_tbody").empty();
@@ -54,7 +55,7 @@ function getAdmin(limt, page, next, callback) {
           '<th>'+ jsondata.data.data[i].last_login +'</th>'+
           '<th>'+ jsondata.data.data[i].last_login_ip +'</th>'+
           '<th class="table_btn">'+
-            '<span name='+ jsondata.data.data[i].id +' class="cursor">编辑</span>'+
+            '<span name='+ jsondata.data.data[i].name +' password='+ jsondata.data.data[i].password +' mobile='+ jsondata.data.data[i].mobile +' uid='+ jsondata.data.data[i].id +' class="cursor edit_root">编辑</span>'+
             '<span name='+ jsondata.data.data[i].id +' class="cursor del_root">删除</span>'+
           '</th>'+
         '</tr>';
@@ -86,6 +87,7 @@ function getUserlist(limt, page, next, callback) {
     success: function(json) {
       var jsondata = JSON.parse(json);
       if (jsondata.code == 0) {
+        callback(Math.ceil(jsondata.data.data.count / jsondata.data.data.page), next);
         var tablehtml = '';
         console.log(jsondata);
         $(".table_tbody").empty();
