@@ -4,6 +4,7 @@ $(function() {
     var type_sure = false;
     var uid = null;
     function callbacklistFun(value, next) {
+        console.log(value, next);
         Page({
 			num:value,				//页码数
 			startnum:next+1,		//指定页码
@@ -70,7 +71,6 @@ $(function() {
     $(".table_tbody").on('click', '.del_root', function() {
         del_uid = $(this).attr('name');
         $(".del_user").css({ display: 'block' });
-        console.log($(this).attr('name'));
     });
     $('.table_tbody').on('click', '.edit_root', function() {
         $(".add_root").css({ display: 'block' });

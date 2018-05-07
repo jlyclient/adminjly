@@ -42,7 +42,8 @@ function getAdmin(limt, page, next, callback) {
       var jsondata = JSON.parse(json);
       console.log(jsondata);
       if (jsondata.code == 0) {
-        callback(Math.ceil(jsondata.data.data.count / jsondata.data.data.page), next);
+        callback(Math.ceil(jsondata.data.count / jsondata.data.page), next);
+        console.log(Math.ceil(jsondata.data.count / jsondata.data.page), next);
         var jsonhtml = json
         var tablehtml = '';
         $(".table_tbody").empty();
@@ -87,7 +88,7 @@ function getUserlist(limt, page, next, callback) {
     success: function(json) {
       var jsondata = JSON.parse(json);
       if (jsondata.code == 0) {
-        callback(Math.ceil(jsondata.data.data.count / jsondata.data.data.page), next);
+        callback(Math.ceil(jsondata.data.count / jsondata.data.page), next);
         var tablehtml = '';
         console.log(jsondata);
         $(".table_tbody").empty();
@@ -104,10 +105,10 @@ function getUserlist(limt, page, next, callback) {
           '<th>'+ jsondata.data.data[i].last_login +'</th>'+
           '<th>'+ jsondata.data.data[i].last_login_ip +'</th>'+
           '<th class="table_btn">'+
-            '<span name='+ jsondata.data.data[i].id +' class="cursor">充值</span>'+
-            '<span name='+ jsondata.data.data[i].id +' class="cursor">禁止</span>'+
-            '<span name='+ jsondata.data.data[i].id +' class="cursor">开通</span>'+
-            '<span name='+ jsondata.data.data[i].id +' class="cursor">删除</span>'+
+            '<span name='+ jsondata.data.data[i].id +' class="cursor chongzhi">充值</span>'+
+            '<span name='+ jsondata.data.data[i].id +' class="cursor forbid_user">禁止</span>'+
+            '<span name='+ jsondata.data.data[i].id +' class="cursor allow_user">开通</span>'+
+            '<span name='+ jsondata.data.data[i].id +' class="cursor del_userlist">删除</span>'+
           '</th>'+
         '</tr>';
         }
