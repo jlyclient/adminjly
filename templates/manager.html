@@ -120,7 +120,7 @@
       <div class="zhenghun_form">
         <div class="zhenghun_form_row">
           <span>原因：</span>
-          <select>
+          <select class="allow_user_select">
             <option value="0">0</option>
             <option value="1">1</option>
             <option value="2">2</option>
@@ -130,7 +130,7 @@
         </div>
         <div class="zhenghun_form_row">
           <span>补充：</span>
-          <textarea name=""></textarea>
+          <textarea class="allow_user_text" name=""></textarea>
         </div>
         <div class="zhenghun_form_row zhenghun_btn">
           <span class="cursor sureallow_user">确定</span>
@@ -152,7 +152,7 @@
       <div class="zhenghun_form">
         <div class="zhenghun_form_row">
           <span>原因：</span>
-          <select>
+          <select  class="forbid_user_select">
             <option value="0">发布低俗内容</option>
             <option value="1">发布政治敏感内容</option>
             <option value="2">发布卖淫内容</option>
@@ -162,7 +162,7 @@
         </div>
         <div class="zhenghun_form_row">
           <span>补充：</span>
-          <textarea name="" ></textarea>
+          <textarea class="forbid_user_text" name="" ></textarea>
         </div>
         <div class="zhenghun_form_row zhenghun_btn">
           <span class="cursor sure_forbid_user">确定</span>
@@ -187,7 +187,7 @@
         充值金额：<input class="recharge_input" type="number"> 元
       </div>
       <div class="zhenghun_form_row zhenghun_btn">
-        <span class="cursor">确定</span>
+        <span class="cursor sure_user_chongzhi">确定</span>
         <span onclick="closePopup(this, '.server_recharge')" class="active cursor close_popup_btn">取消</span>
       </div>
     </div>

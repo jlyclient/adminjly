@@ -3,7 +3,6 @@ $(function() {
     var option_id = null;
     $(".list_columnbox").find('li').map((index, data) => {
         $(data).removeClass("active");
-        console.log($(data).attr('class'));
         if ($(data).attr('class') == 'list_column user_list') {
             $(data).addClass('active');
         }
@@ -54,9 +53,102 @@ $(function() {
         option_id = $(this).attr('name');
         $('.close_zhenghun').css({ display: 'block' });
     })
+    $(".sure_forbid_user").click(function() {
+        var xsrf = get_cookie_by_name('_xsrf');
+        var forbid_option = $('.forbid_user_select').find('option:selected').attr("value");
+        var forbid_text = $('.forbid_user_text').val();
+        // uid=xxx&option=xxx&msg=xxx
+        if (forbid_option != '' || forbid_text != '') {
+            $.ajax({
+                url: '/forbid_user',
+                type: 'POST',
+                data: {
+                    '_xsrf': xsrf,
+                    option: forbid_option,
+                    msg: forbid_text
+                },
+                success: function(data) {
+                    var jsondata = JSON.parse(data);
+                    if (jsondata.code == '0') {
+                        closePopup(this, '.close_zhenghun');
+                        getUserlist(10, 10, 0, callbacklistFun);
+                    } else {
+                        alert(jsondata.msg);
+                    }
+                },
+                error: function(para) {
+                    alert(para);
+                }
+            })
+        } else {
+            alert('请填写禁止用户的原因！');
+        }
+    })
     // 开通用户
     $('.table_tbody').on('click', '.allow_user', function() {
-
+        option_id = $(this).attr('name');
+        $('.openup_zhenghun').css({ display: 'block' });
+    });
+    $(".sureallow_user").click(function() {
+        var xsrf = get_cookie_by_name('_xsrf');
+        var forbid_option = $('.allow_user_select').find('option:selected').attr("value");
+        var forbid_text = $('.allow_user_text').val();
+        if (forbid_option != '' || forbid_text != '') {
+            $.ajax({
+                url: '/allow_user',
+                type: 'POST',
+                data: {
+                    '_xsrf': xsrf,
+                    option: forbid_option,
+                    msg: forbid_text
+                },
+                success: function(data) {
+                    var jsondata = JSON.parse(data);
+                    if (jsondata.code == '0') {
+                        closePopup(this, '.openup_zhenghun');
+                        getUserlist(10, 10, 0, callbacklistFun);
+                    } else {
+                        alert(jsondata.msg);
+                    }
+                },
+                error: function(para) {
+                    alert(para);
+                }
+            })
+        } else {
+            alert('请填写开通用户的原因！');
+        }
+    });
+    // 充值
+    $('.table_tbody').on('click', '.chongzhi', function() {
+        option_id = $(this).attr('name');
+        $('.server_recharge').css({ display: 'block' });
+    });
+    $(".sure_user_chongzhi").click(function() {
+        if ($(".recharge_input").val() != '' || $(".recharge_input").val() != 0) {
+            $.ajax({
+                url: '/chongzhi',
+                type: 'POST',
+                data: {
+                    uid: option_id,
+                    num: $(".recharge_input").val()
+                },
+                success: function(data) {
+                    var jsondata = JSON.parse(data);
+                    if (jsondata.code == '0') {
+                        closePopup(this, '.server_recharge');
+                        getUserlist(10, 10, 0, callbacklistFun);
+                    } else {
+                        alert(jsondata.msg);
+                    }
+                },
+                error: function(para) {
+                    alert(para);
+                }
+            })
+        } else {
+            alert('充值金额不能为空或者0');
+        }
     })
     // $(".list_columnbox").find('.user_list').eq(0).addClass('active');
 })
