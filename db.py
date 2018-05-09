@@ -15,6 +15,7 @@ from sqlalchemy.sql import and_, or_, not_
 from sqlalchemy import desc
 
 def sendemail(uid=None, msg=None):
+    return
     if not uid or not msg:
         return None
 

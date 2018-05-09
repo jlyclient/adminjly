@@ -125,11 +125,13 @@ $(function() {
         $('.server_recharge').css({ display: 'block' });
     });
     $(".sure_user_chongzhi").click(function() {
+        var xsrf = get_cookie_by_name('_xsrf');
         if ($(".recharge_input").val() != '' || $(".recharge_input").val() != 0) {
             $.ajax({
                 url: '/chongzhi',
                 type: 'POST',
                 data: {
+                    _xsrf: xsrf,
                     uid: option_id,
                     num: $(".recharge_input").val()
                 },
