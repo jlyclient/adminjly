@@ -65,7 +65,8 @@ $(function() {
                 data: {
                     '_xsrf': xsrf,
                     option: forbid_option,
-                    msg: forbid_text
+                    msg: forbid_text,
+                    uid: option_id
                 },
                 success: function(data) {
                     var jsondata = JSON.parse(data);
@@ -100,7 +101,8 @@ $(function() {
                 data: {
                     '_xsrf': xsrf,
                     option: forbid_option,
-                    msg: forbid_text
+                    msg: forbid_text,
+                    uid: option_id
                 },
                 success: function(data) {
                     var jsondata = JSON.parse(data);

@@ -108,7 +108,6 @@ function getUserlist(limt, page, next, callback) {
             '<span name='+ jsondata.data.data[i].id +' class="cursor chongzhi">充值</span>'+
             '<span name='+ jsondata.data.data[i].id +' class="cursor forbid_user">禁止</span>'+
             '<span name='+ jsondata.data.data[i].id +' class="cursor allow_user">开通</span>'+
-            '<span name='+ jsondata.data.data[i].id +' class="cursor del_userlist">删除</span>'+
           '</th>'+
         '</tr>';
         }

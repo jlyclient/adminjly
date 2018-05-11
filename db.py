@@ -15,10 +15,9 @@ from sqlalchemy.sql import and_, or_, not_
 from sqlalchemy import desc
 
 def sendemail(uid=None, msg=None):
-    return
     if not uid or not msg:
         return None
-
+'''
     url = conf.email_url
     body_value = {"cuid": conf.admin_id,
                   "uid": uid,
@@ -26,6 +25,7 @@ def sendemail(uid=None, msg=None):
     body_value  = urllib.urlencode(body_value)
     request = urllib2.Request(url=url, data=body_value)
     result = urllib2.urlopen(request)
+'''
 
 def digest(word):
     m2 = hashlib.md5()
@@ -224,7 +224,7 @@ def edit_user(uid=None, opt=None, bc=None, state=0):
     if opt == 0:
         msg = conf.reasons[0]
     elif opt and int(opt) in [0,1,2,3,4]:
-        msg = conf.reasons[opt]
+        msg = conf.reasons[int(opt)]
     elif bc:
         msg = bc[:128]
     s = DBSession()
